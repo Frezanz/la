@@ -96,8 +96,10 @@ fn wire() {
     let command = doc.get_element_by_id("command").unwrap().dyn_into::<HtmlInputElement>().unwrap();
     let memory = doc.get_element_by_id("memory").unwrap();
 
-    for button in doc.query_selector_all("[data-command]").unwrap().iter() {
-        if let Some(el) = button.dyn_ref::<Element>() {
+    let command_buttons = doc.query_selector_all("[data-command]").unwrap();
+    for i in 0..command_buttons.length() {
+        if let Some(button) = command_buttons.item(i) {
+            if let Some(el) = button.dyn_ref::<Element>() {
             let value = el.get_attribute("data-command").unwrap_or_default();
             let input = command.clone();
             let closure = Closure::<dyn FnMut(_)>::new(move |_event: web_sys::Event| {
@@ -105,7 +107,8 @@ fn wire() {
                 let _ = input.focus();
             });
             el.add_event_listener_with_callback("click", closure.as_ref().unchecked_ref()).unwrap();
-            closure.forget();
+                closure.forget();
+            }
         }
     }
 
@@ -140,8 +143,10 @@ fn wire() {
     focus.add_event_listener_with_callback("click", focus_closure.as_ref().unchecked_ref()).unwrap();
     focus_closure.forget();
 
-    for button in doc.query_selector_all("[data-view]").unwrap().iter() {
-        if let Some(el) = button.dyn_ref::<Element>() {
+    let view_buttons = doc.query_selector_all("[data-view]").unwrap();
+    for i in 0..view_buttons.length() {
+        if let Some(button) = view_buttons.item(i) {
+            if let Some(el) = button.dyn_ref::<Element>() {
             let label = el.get_attribute("data-view").unwrap_or_default();
             let toast = toast.clone();
             let closure = Closure::<dyn FnMut(_)>::new(move |_event: web_sys::Event| {
@@ -149,7 +154,8 @@ fn wire() {
                 toast.set_class_name("toast show");
             });
             el.add_event_listener_with_callback("click", closure.as_ref().unchecked_ref()).unwrap();
-            closure.forget();
+                closure.forget();
+            }
         }
     }
 }
