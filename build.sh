@@ -18,7 +18,7 @@ fi
 rustup default stable
 rustup target add wasm32-unknown-unknown
 
-WASM_BINDGEN_VERSION="0.2.114"
+WASM_BINDGEN_VERSION="0.2.128"
 WASM_BINDGEN_DIR="$HOME/.local/bin"
 WASM_BINDGEN="$WASM_BINDGEN_DIR/wasm-bindgen"
 
