@@ -1,11 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+export CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
+export RUSTUP_HOME="${RUSTUP_HOME:-$HOME/.rustup}"
+export PATH="$CARGO_HOME/bin:$HOME/.local/bin:$PATH"
+
 if ! command -v rustup >/dev/null 2>&1; then
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
 fi
 
-source "$HOME/.cargo/env"
+source "$CARGO_HOME/env" 2>/dev/null || true
+
+# Netlify may provide rustup without a configured default toolchain.
+if ! rustup toolchain list | grep -qE '^stable(-|[[:space:]])'; then
+  rustup toolchain install stable --profile minimal
+fi
+rustup default stable
 rustup target add wasm32-unknown-unknown
 
 WASM_BINDGEN_VERSION="0.2.114"
